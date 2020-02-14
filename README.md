@@ -2,7 +2,7 @@
 Controlling Midi in Unity with EasyController.
 These files are used for using the EasyController to receive and send massages from/to Unity.
 
-1. Download the sample project, to see the usage. 
+1. Download the sample unitypackage to see usage. 
 
 2. Download also the Easycontroller thorugh here: http://42noir.com/es/
 
