@@ -17,8 +17,10 @@ public class EasyController : MonoBehaviour
     //public ArrayList tmpList;
     public int[] mmaxvalues;
     private SortedList easyconl, easyactive;
+
     public static EasyController escon;
     public static EasyControllerSend esconsend;
+
     public int a, b;
     public string returnData; //didn't use to be public
     ArrayList bufferList;
@@ -26,6 +28,12 @@ public class EasyController : MonoBehaviour
     int iter = 0;
     int pre_index = -1;
     private bool is_updated;
+
+    //parameters for counting new changes and waiting one loop
+    bool count_new_states = false;
+    int count_new = 0;
+    int final_n_new = -1;
+    int count = 0;
 
     void Start()
     {
@@ -35,16 +43,14 @@ public class EasyController : MonoBehaviour
         easyactive = new SortedList();
         populate_list(easyconl);
         populate_list(easyactive);
-        escon = GameObject.FindWithTag("Interaction").GetComponent(typeof(EasyController)) as EasyController; //connect to easy_controller
-        esconsend = GameObject.FindWithTag("Interaction").GetComponent(typeof(EasyControllerSend)) as EasyControllerSend; //connect to easy_controller
+        escon = FindObjectOfType<EasyController>() as EasyController; //connect to easy_controller
+        esconsend = FindObjectOfType<EasyControllerSend>() as EasyControllerSend;
 
         client = new UdpClient(port);
         RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         t_udp = new Thread(new ThreadStart(UDPRead));
         t_udp.Name = "UDP thread";
         t_udp.Start();
-      
-        //FilterData(test);
     }
 
     public void UDPRead()
@@ -63,7 +69,7 @@ public class EasyController : MonoBehaviour
                     bufferList.Add(returnData);
                     iter++;
                 }
-              
+
 
             }
             catch (Exception e)
@@ -76,6 +82,19 @@ public class EasyController : MonoBehaviour
 
     private void Update()
     {
+
+        if (final_n_new == -1)
+        {
+            if (count_new_states == false) count_new_states = true;
+            else
+            {
+                final_n_new = count_new;
+                count_new_states = false;
+                count = 0;
+            }
+        }
+
+
         while (iter > 0)
         {
             FilterData(bufferList[0].ToString());
@@ -89,12 +108,14 @@ public class EasyController : MonoBehaviour
 
     void LateUpdate()
     {
-        while(prebuffer.Count>0)
-        {
-            easyactive[prebuffer[0]] = -1;
-            prebuffer.RemoveAt(0);
-        }
+        //while (prebuffer.Count > 0)
+        //{
+        //    easyactive[prebuffer[0]] = -1;
+        //    prebuffer.RemoveAt(0);
+        //}
     }
+    
+
 
     void OnDisable()
     {
@@ -120,6 +141,7 @@ public class EasyController : MonoBehaviour
         }
         easyactive[mmaxvalues[0]] = easyconl[mmaxvalues[0]];
         easyconl[mmaxvalues[0]] = mmaxvalues[1];
+        UnityEngine.Debug.Log(easyactive[101]);
 
 
     }
@@ -130,26 +152,26 @@ public class EasyController : MonoBehaviour
     }
 
 
-    
-
     public bool is_triggered(int index)
     {
-     
-        if ((int)easyactive[index]==1)
+        if ((int)easyactive[index] == 1)
         {
+            counting();
             return true;
         }
+        counting();
         return false;
     }
 
     public bool bang(int index)
     {
-
         if ((int)easyactive[index] == 1)
         {
-            esconsend.Send_data(index,0);
+            esconsend.Send_data(index, 0);
+            counting();
             return true;
         }
+        counting();
         return false;
     }
 
@@ -158,21 +180,44 @@ public class EasyController : MonoBehaviour
         return (int)easyconl[index];
     }
 
+    public void sync(int index, int value)
+    {
+        easyconl[index] = value;
+    }
+
     public float get_state(int index, float from, float to)
     {
         float value = (int)easyconl[index];
         return scale(value, 0.0f, 127.0f, from, to);
     }
 
+    private void counting()
+    {
+        //first time we count no. of new.
+        if (count_new_states) count_new += 1;
+        else count += 1;
+
+        if (count == final_n_new)
+        {
+            while (prebuffer.Count > 0)
+            {
+                easyactive[prebuffer[0]] = -1;
+                prebuffer.RemoveAt(0);
+            }
+            count = 0;
+        }
+    }
 
     public int get_newstate(int index)
     {
-        //Debug.Log((int)easyconl[index]);
         if ((int)easyactive[index]!=-1)
         {
-            //Debug.Log(easyactive[index]);
-            return (int)easyconl[index];
+            int temp = (int)easyconl[index];
+
+            counting();
+            return temp;
         }
+        counting();
         return -1;
     }
 
@@ -181,9 +226,10 @@ public class EasyController : MonoBehaviour
         if ((int)easyactive[index] != (int)easyconl[index])
         {
             float value = (float)escon.easyconl[index];
+            counting();
             return scale(value, 0.0f, 127.0f, from, to);
         }
-
+        counting();
         return -1.0f;
     }
 
@@ -191,6 +237,7 @@ public class EasyController : MonoBehaviour
 
     private void populate_list(SortedList easyconlist)
     {
+        //sliders
         easyconlist.Add(0, -1);
         easyconlist.Add(1, -1);
         easyconlist.Add(2, -1);
@@ -211,6 +258,7 @@ public class EasyController : MonoBehaviour
         easyconlist.Add(17, -1);
         easyconlist.Add(18, -1);
 
+        //buttons
         easyconlist.Add(101, -1);
         easyconlist.Add(102, -1);
         easyconlist.Add(103, -1);
