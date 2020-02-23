@@ -35,7 +35,7 @@ public class EasyController : MonoBehaviour
     int final_n_new = -1;
     int count = 0;
 
-    void Start()
+    void Awake()
     {
         bufferList = new ArrayList();
         prebuffer = new ArrayList();
