@@ -22,7 +22,7 @@ public class EasyControllerSend : MonoBehaviour
     // gui
     public string easymsg= "";
     // Use this for initialization
-    void Start()
+    void Awake()
     {
     
         // define
