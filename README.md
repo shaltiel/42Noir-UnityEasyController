@@ -5,9 +5,6 @@ EasyController is a standalone tool for live performance. It provides an easy an
    
 <a href="url"><img src="https://github.com/shaltiel/42Noir-UnityEasyController/blob/master/IMG_4884%20demo%20to%20gif%20shorter.gif" align="centre" height="270" width="480" ></a>
 
-
-<a href="url"><img src="http://42noir.com/wp-content/uploads/2016/12/3-screenshot@2x-1.png" align="left" height="200" width="300" ></a>
-
 ## Features
 - Map your midi-controller by touching the knobs and click on the desired knob in the panel
 - Set to work with the parameters directly in your Unity, OF and Max/MSP. 
