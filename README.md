@@ -8,16 +8,13 @@ EasyController is a standalone tool for live performance. It provides an easy an
 
 <a href="url"><img src="http://42noir.com/wp-content/uploads/2016/12/3-screenshot@2x-1.png" align="left" height="200" width="300" ></a>
 
-# 42Noir-UnityEasyController
-Controlling Midi in Unity with EasyController.
-These files are used for using the EasyController to receive and send massages from/to Unity.
+## Features
+- Map your midi-controller by touching the knobs and click on the desired knob in the panel
+- Set to work with the parameters directly in your Unity, OF and Max/MSP. 
+- Label knobs/pads
+- Interpolate values built-in
+- Set and activate presets
 
-1. Download the sample unitypackage to see usage. The C# is open-sourced and simple so you can also add more functionality if needed.
-
-2. Download also the Easycontroller thorugh here: http://42noir.com/es/
-
-Features: 
-- Use simultanously with max/msp and Openframeworks. 
-- Easymaping, presets, back-sending, get new states. See more information in the link above.
-
-
+## Download
+1. Download Easycontroller through – http://42noir.com/es/
+2. Download the sample unitypackage to see usage. The C# is open-sourced and you can easily add more functionality if needed.
