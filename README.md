@@ -1,6 +1,6 @@
 # Easycontroller for Unity
 
-EasyController is a standalone tool for live performance. It provides an easy and standard way of mapping and controlling midi controllers, and support different platforms; Unity, Max/MSP, and openFramework. 
+EasyController is a standalone tool for live performance. It provides an easy and standard way of mapping and controlling midi controllers, set presets, and it supports different platforms; Unity, Max/MSP, and openFramework. 
  
    
 <a href="url"><img src="https://github.com/shaltiel/42Noir-UnityEasyController/blob/master/IMG_4884%20demo%20to%20gif%20shorter.gif" align="centre" height="270" width="480" ></a>
