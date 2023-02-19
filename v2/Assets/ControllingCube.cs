@@ -30,7 +30,7 @@ public class ControllingCube : MonoBehaviour
 
 
 
-        EasyController.esconsend.Send_data(111+(int)s1a, 1); //sending push button back to easycontrooler, we can use number or keys.
+        //EasyController.esconsend.Send_data(111+(int)s1a, 1); //sending push button back to easycontrooler, we can use number or keys.
       
 
         List<int[]> notes_events = EasyController.escon.get_new_notes(); // receive all new notes that were pressed within the last frame rendering.

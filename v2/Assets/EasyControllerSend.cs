@@ -36,8 +36,8 @@ public class EasyControllerSend : MonoBehaviour
         client = new UdpClient();
 
         // status
-        print("Sending to " + IP + " : " + port);
-        print("Testing: nc -lu " + IP + " : " + port);
+        //print("Sending to " + IP + " : " + port);
+        //print("Testing: nc -lu " + IP + " : " + port);
 
         //Send_data("200 1"); //200 is preset
         Send_data("160 1"); //160 initial sync

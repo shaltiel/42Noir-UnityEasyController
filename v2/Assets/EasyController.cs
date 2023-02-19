@@ -26,7 +26,6 @@ public class EasyController : MonoBehaviour
     public string returnData; //didn't use to be public
     ArrayList bufferList;
     ArrayList prebuffer;
-    int iter = 0;
     int pre_index = -1;
     private bool is_updated;
 
@@ -78,23 +77,25 @@ public class EasyController : MonoBehaviour
             try
             {
                 byte[] receiveBytes = client.Receive(ref RemoteIpEndPoint);
-                //				byte[] sendBytes = client.Send(ref RemoteIpEndPoint);
+               
                 returnData = Encoding.ASCII.GetString(receiveBytes);
-
-                // parsing //
-                if (receiveBytes.Length > 0)
+                 // parsing //
+                lock (bufferList)
                 {
-                    bufferList.Add(returnData);
-                    iter++;
+                    if (returnData.Length > 0)
+                    {
+                        bufferList.Add(returnData);
+                    }
                 }
 
 
             }
             catch (Exception e)
             {
-                Debug.Log("Not so good " + e.ToString());
+                if (!t_udp.IsAlive)
+                    Debug.Log("Not so good " + e.ToString());
             }
-            Thread.Sleep(2);
+            Thread.Sleep(0);
         }
     }
 
@@ -112,15 +113,26 @@ public class EasyController : MonoBehaviour
             }
         }
 
+        //try
+        //{
+            lock (bufferList)
+            {
+                while ((bufferList.Count > 0))
+                {
+                      
+                    FilterData(bufferList[0].ToString());
 
-        while (iter > 0)
-        {
-            FilterData(bufferList[0].ToString());
-            iter--;
-            prebuffer.Add(mmaxvalues[0]);
-            bufferList.RemoveAt(0);
-            easyactive[mmaxvalues[0]] = easyconl[mmaxvalues[0]];
-        }
+                    prebuffer.Add(mmaxvalues[0]);
+                    bufferList.RemoveAt(0);
+                    easyactive[mmaxvalues[0]] = easyconl[mmaxvalues[0]];
+                }
+            }
+        //}
+        //catch (Exception e)
+        //{
+        //    UnityEngine.Debug.Log("fail " + e.ToString());
+        //    UnityEngine.Debug.Log("buffersizefail " + bufferList.Count.ToString());
+        //}
 
     }
 
@@ -132,7 +144,8 @@ public class EasyController : MonoBehaviour
         //    prebuffer.RemoveAt(0);
         //}
     }
-    
+
+
 
 
     void OnDisable()
@@ -151,15 +164,16 @@ public class EasyController : MonoBehaviour
         mmaxvalues = new int[0];
         string[] separators = { ",", " ", "" };
         string[] values = returnData.Split(separators, StringSplitOptions.RemoveEmptyEntries);
-
+        
         mmaxvalues = new int[values.Length - 1];
         for (int i = 0; i < values.Length - 1; i++)
         {
             mmaxvalues[i] = int.Parse(values[i]);
         }
+        
         easyactive[mmaxvalues[0]] = easyconl[mmaxvalues[0]];
         easyconl[mmaxvalues[0]] = mmaxvalues[1];
-        //UnityEngine.Debug.Log(easyactive[101]);
+        
 
 
     }
