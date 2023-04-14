@@ -1,4 +1,4 @@
-
+﻿
 using UnityEngine;
 using System.Collections;
 
@@ -22,7 +22,7 @@ public class EasyControllerSend : MonoBehaviour
     // gui
     public string easymsg= "";
     // Use this for initialization
-    void Awake()
+    void Start()
     {
     
         // define
@@ -36,8 +36,8 @@ public class EasyControllerSend : MonoBehaviour
         client = new UdpClient();
 
         // status
-        print("Sending to " + IP + " : " + port);
-        print("Testing: nc -lu " + IP + " : " + port);
+        //print("Sending to " + IP + " : " + port);
+        //print("Testing: nc -lu " + IP + " : " + port);
 
         //Send_data("200 1"); //200 is preset
         Send_data("160 1"); //160 initial sync
@@ -52,9 +52,7 @@ public class EasyControllerSend : MonoBehaviour
     {
         try
         {
-
             //nt length = c*1000+v;
-
             byte[] data = Encoding.UTF8.GetBytes(str);
           
                 client.Send(data, data.Length, remoteEndPoint);
@@ -71,10 +69,18 @@ public class EasyControllerSend : MonoBehaviour
         EasyController.escon.sync(index, value);
     }
 
+    public void Send_data(string sindex, int value)
+    {
+        int index = EasyController.escon.string_to_index(sindex);
+        Send_data(index.ToString() + " " + value.ToString());
+        EasyController.escon.sync(index, value);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
             Send_data(easymsg);
     }
+
 }
 
