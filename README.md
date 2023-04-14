@@ -1,5 +1,5 @@
-# Easycontroller v2 for Unity
-This is for the new version 2023 of easycontroller.
+# Easycontroller v2 for Unity 
+This is for the new version 2023 of easycontroller (for the old version, switch to branch v1). 
 EasyController is a standalone tool for live performance. It provides an easy and standard way of mapping and controlling midi controllers, set presets, and it supports different platforms; Unity, Max/MSP, and openFramework. 
  
    
